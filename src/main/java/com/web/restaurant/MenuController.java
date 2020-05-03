@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import static com.util.ValidationUtil.assureIdConsistent;
@@ -89,7 +89,7 @@ public class MenuController {
 
     private Menu getMenu(HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("UTF-8");
-        return new Menu(request.getParameter("title"), LocalDateTime.parse(request.getParameter("dateTime")));
+        return new Menu(request.getParameter("title"), LocalDate.parse(request.getParameter("date")));
     }
 
     private int getId(HttpServletRequest request) {

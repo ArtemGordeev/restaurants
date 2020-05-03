@@ -29,7 +29,7 @@ public class RootController {
     @PostMapping("/restaurants")
     public String setUser(HttpServletRequest request) {
         int userId = Integer.parseInt(request.getParameter("userId"));
-        SecurityUtil.setAuthUserId(userId);
+        //SecurityUtil.setAuthUserId(userId);
         return "redirect:restaurants";
     }
 }

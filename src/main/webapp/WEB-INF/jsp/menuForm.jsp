@@ -15,8 +15,8 @@
         <dl>
             <dt>Title</dt>
             <dd><input type="text" value="${menu.title}" size=40 name="title" required></dd>
-            <dt>Title</dt>
-            <dd><input type="datetime-local" value="${menu.dateTime}" size=40 name="dateTime" required></dd>
+            <dt>Date</dt>
+            <dd><input type="date" value="${menu.date}" size=40 name="date" required></dd>
         </dl>
         <button type="submit">Save</button>
         <button onclick="window.history.back()" type="button">Cancel</button>

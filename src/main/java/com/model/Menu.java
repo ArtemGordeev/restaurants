@@ -6,11 +6,12 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "menus")
+@Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "date"}, name = "menus_unique_restaurant_id_date_idx")})
 public class Menu extends AbstractBaseEntity implements HasId {
     @Column(name = "title")
     String title;
@@ -24,12 +25,12 @@ public class Menu extends AbstractBaseEntity implements HasId {
     @NotNull
     Restaurant restaurant;
 
-    @Column(name = "date_time", nullable = false)
+    @Column(name = "date", nullable = false)
     @NotNull
-    private LocalDateTime dateTime;
+    private LocalDate date;
 
     public Menu() {
-        dateTime = LocalDateTime.now();
+        date = LocalDateTime.now().toLocalDate();
     }
 
     public Menu(Integer id) {
@@ -41,15 +42,15 @@ public class Menu extends AbstractBaseEntity implements HasId {
         this.title = title;
     }
 
-    public Menu(String title, @NotNull LocalDateTime dateTime) {
+    public Menu(String title, @NotNull LocalDate date) {
         this.title = title;
-        this.dateTime = dateTime;
+        this.date = date;
     }
 
-    public Menu(Integer id, String title, @NotNull LocalDateTime dateTime) {
+    public Menu(Integer id, String title, @NotNull LocalDate date) {
         super(id);
         this.title = title;
-        this.dateTime = dateTime;
+        this.date = date;
     }
 
     public String getTitle() {
@@ -76,12 +77,12 @@ public class Menu extends AbstractBaseEntity implements HasId {
         this.restaurant = restaurant;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     @Override

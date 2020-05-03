@@ -8,12 +8,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Repository
@@ -36,7 +32,7 @@ public class VoteRepositoryImpl implements VoteRepository{
     public List<VoteTo> getAll(int userId) {
         List<Vote> all = crudVoteRepository.findAllByUserId(userId);
         return all.stream()
-                .map(vote -> new VoteTo(vote.getId(), vote.getDateTime(), vote.getRestaurant().getTitle(), vote.getUser()))
+                .map(vote -> new VoteTo(vote.getId(), vote.getDate(), vote.getTime(), vote.getRestaurant().getTitle(), vote.getUser()))
                 .collect(Collectors.toList());
     }
 
@@ -44,18 +40,19 @@ public class VoteRepositoryImpl implements VoteRepository{
     @Transactional
     public Vote save(int restaurantId, int userId) {
         Restaurant restaurant = crudRestaurantRepository.getOne(restaurantId);
-        Vote vote = crudVoteRepository.findByUserIdAndDateTimeAfter(userId, LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT));
+        Vote vote = crudVoteRepository.findByUserIdAndDateIsLike(userId, LocalDate.now());
         if (vote != null) {
             if (vote.afterEleven()) {
                 return null;
             } else {
-                vote.setDateTime(LocalDateTime.now());
+                vote.setDate(LocalDate.now());
+                vote.setTime(LocalTime.now());
                 vote.setRestaurant(restaurant);
                 return crudVoteRepository.save(vote);
             }
         }
         User user = crudUserRepository.getOne(userId);
-        vote = new Vote(LocalDateTime.now(), restaurant, user);
+        vote = new Vote(LocalDate.now(), LocalTime.now(), restaurant, user);
         return crudVoteRepository.save(vote);
     }
 

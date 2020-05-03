@@ -1,11 +1,9 @@
 package com.web.user;
 
-import com.model.AbstractBaseEntity;
 import com.model.User;
 import com.service.UserService;
 import com.to.UserTo;
 import com.util.UserUtil;
-import com.util.exception.ModificationRestrictionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +23,6 @@ public abstract class AbstractUserController {
 
     @Autowired
     private UniqueMailValidator emailValidator;
-
-    private boolean modificationRestriction = true;
-
-//    @Autowired
-//    @SuppressWarnings("deprecation")
-//    public void setEnvironment(Environment environment) {
-//        modificationRestriction = environment.acceptsProfiles(Profiles.HEROKU);
-//    }
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -62,21 +52,18 @@ public abstract class AbstractUserController {
 
     public void delete(int id) {
         log.info("delete {}", id);
-        checkModificationAllowed(id);
         service.delete(id);
     }
 
     public void update(User user, int id) {
         log.info("update {} with id={}", user, id);
         assureIdConsistent(user, id);
-        checkModificationAllowed(id);
         service.update(user);
     }
 
     public void update(UserTo userTo, int id) {
         log.info("update {} with id={}", userTo, id);
         assureIdConsistent(userTo, id);
-        checkModificationAllowed(id);
         service.update(userTo);
     }
 
@@ -87,13 +74,6 @@ public abstract class AbstractUserController {
 
     public void enable(int id, boolean enabled) {
         log.info(enabled ? "enable {}" : "disable {}", id);
-        checkModificationAllowed(id);
         service.enable(id, enabled);
-    }
-
-    private void checkModificationAllowed(int id) {
-        if (modificationRestriction && id < AbstractBaseEntity.START_SEQ + 2) {
-            throw new ModificationRestrictionException();
-        }
     }
 }

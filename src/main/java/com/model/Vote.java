@@ -6,16 +6,19 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "votes")
+@Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "date"}, name = "votes_unique_user_date_idx")})
 public class Vote extends AbstractBaseEntity{
 
-    @Column(name = "date_time", nullable = false)
+    @Column(name = "date", nullable = false)
     @NotNull
-    private LocalDateTime dateTime;
+    private LocalDate date;
+
+    @Column(name = "time", nullable = false)
+    @NotNull
+    private LocalTime time;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
@@ -32,12 +35,12 @@ public class Vote extends AbstractBaseEntity{
     public Vote() {
     }
 
-    public Vote(LocalDateTime dateTime, Restaurant restaurant, User user) {
-        this.dateTime = dateTime;
+    public Vote(LocalDate date, LocalTime time, Restaurant restaurant, User user) {
+        this.date = date;
+        this.time = time;
         this.restaurant = restaurant;
         this.user = user;
     }
-
 
     public Restaurant getRestaurant() {
         return restaurant;
@@ -47,12 +50,20 @@ public class Vote extends AbstractBaseEntity{
         this.restaurant = restaurant;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public User getUser() {
@@ -64,10 +75,10 @@ public class Vote extends AbstractBaseEntity{
     }
 
     public boolean isTodayVote(){
-        return dateTime.toLocalDate().equals(LocalDate.now());
+        return date.equals(LocalDate.now());
     }
 
     public boolean afterEleven(){
-        return dateTime.toLocalTime().compareTo(LocalTime.of(11, 0)) >= 0;
+        return time.compareTo(LocalTime.of(11, 0)) >= 0;
     }
 }

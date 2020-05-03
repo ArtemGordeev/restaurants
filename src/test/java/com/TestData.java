@@ -6,7 +6,7 @@ import com.model.Restaurant;
 import com.to.RestaurantTo;
 import com.to.VoteTo;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class TestData {
 
     public static final Dish DISH1 = new Dish(DISH1_ID, "Pizza", 150);
     public static final Dish DISH2 = new Dish(DISH2_ID, "Tea", 50);
-    public static final Menu MENU = new Menu(MENU_ID, "Monday", LocalDateTime.of(2020, Month.APRIL, 1, 0, 0));
+    public static final Menu MENU = new Menu(MENU_ID, "Monday", LocalDate.of(2020, Month.APRIL, 1));
     public static final Restaurant RESTAURANT = new Restaurant(RESTAURANT_ID, "KFC");
     public static final RestaurantTo RESTAURANT_TO = new RestaurantTo(RESTAURANT_ID, "KFC", 0);
 

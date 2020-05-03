@@ -2,25 +2,40 @@ package com.to;
 
 import com.model.User;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class VoteTo extends BaseTo{
-    private LocalDateTime dateTime;
+    private LocalDate date;
+    private LocalTime time;
     private String restaurant;
     private User user;
 
     public VoteTo() {
     }
 
-    public VoteTo(Integer id, LocalDateTime dateTime, String restaurant, User user) {
+    public VoteTo(Integer id, LocalDate date, LocalTime time, String restaurant, User user) {
         super(id);
-        this.dateTime = dateTime;
+        this.date = date;
+        this.time = time;
         this.restaurant = restaurant;
         this.user = user;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public String getRestaurant() {
@@ -31,9 +46,6 @@ public class VoteTo extends BaseTo{
         return user;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
 
     public void setRestaurant(String restaurant) {
         this.restaurant = restaurant;
@@ -46,10 +58,11 @@ public class VoteTo extends BaseTo{
     @Override
     public String toString() {
         return "VoteTo{" +
-                "id=" + id +
-                ", dateTime=" + dateTime +
+                "date=" + date +
+                ", time=" + time +
                 ", restaurant='" + restaurant + '\'' +
                 ", user=" + user +
+                ", id=" + id +
                 '}';
     }
 }

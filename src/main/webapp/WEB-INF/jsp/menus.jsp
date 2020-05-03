@@ -28,7 +28,7 @@
             <jsp:useBean id="menu" type="com.model.Menu"/>
             <tr>
                 <td>${menu.title}</td>
-                <td>${menu.dateTime}</td>
+                <td>${menu.date}</td>
                 <td><a href="menus/update/${menu.id}">Update</a></td>
                 <td><a href="menus/delete/${menu.id}">Delete</a></td>
                 <td><a href="menus/${menu.id}/dishes">Show dishes</a></td>
