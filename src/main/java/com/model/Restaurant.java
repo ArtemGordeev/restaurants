@@ -3,6 +3,7 @@ package com.model;
 import com.HasId;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 
@@ -11,6 +12,7 @@ import java.util.List;
 public class Restaurant extends AbstractBaseEntity implements HasId {
 
     @Column(name = "title")
+    @NotBlank
     private String title;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")

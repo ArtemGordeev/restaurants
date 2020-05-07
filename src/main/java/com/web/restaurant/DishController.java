@@ -32,8 +32,7 @@ public class DishController {
     }
 
     @GetMapping("/{restaurantId}/menus/{menuId}/dishes")
-    public String get(//@PathVariable("restaurantId") int restaurantId,
-                      @PathVariable("menuId") int menuId,
+    public String get(@PathVariable("menuId") int menuId,
                       Model model) {
         model.addAttribute("dishes", dishRepository.getAll(menuId));
         return "dishes";
@@ -48,9 +47,7 @@ public class DishController {
     }
 
     @GetMapping("/{restaurantId}/menus/{menuId}/dishes/update/{dishId}")
-    public String update(//@PathVariable("restaurantId") int restaurantId,
-                         //@PathVariable("menuId") int menuId,
-                         @PathVariable("dishId") int dishId,
+    public String update(@PathVariable("dishId") int dishId,
                          Model model) {
         final Dish dish = dishRepository.get(dishId);
         model.addAttribute("dish", dish);
@@ -60,11 +57,9 @@ public class DishController {
     @PostMapping("/{restaurantId}/menus/{menuId}/dishes/update/{dishId}")
     public String update(@PathVariable("restaurantId") int restaurantId,
                          @PathVariable("menuId") int menuId,
-                         //@PathVariable("dishId") int dishId,
                          HttpServletRequest request) throws IOException {
         Dish dish = getDish(request);
         int id = getId(request);
-        //int userId = SecurityUtil.authUserId();
         assureIdConsistent(dish, id);
 
         log.info("update {}", dish);
@@ -84,7 +79,6 @@ public class DishController {
                          @PathVariable("menuId") int menuId,
                          HttpServletRequest request) throws IOException {
         Dish dish = getDish(request);
-        //int userId = SecurityUtil.authUserId();
         checkNew(dish);
         log.info("create {}", dish);
         dishRepository.save(dish, menuId);

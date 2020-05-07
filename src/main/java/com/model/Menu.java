@@ -1,10 +1,12 @@
 package com.model;
 
 import com.HasId;
+import com.View;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,16 +16,17 @@ import java.util.List;
 @Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "date"}, name = "menus_unique_restaurant_id_date_idx")})
 public class Menu extends AbstractBaseEntity implements HasId {
     @Column(name = "title")
-    String title;
+    @NotBlank
+    private String title;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
-    List<Dish> dishes;
+    private List<Dish> dishes;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
-    Restaurant restaurant;
+    @NotNull(groups = View.Persist.class)
+    private Restaurant restaurant;
 
     @Column(name = "date", nullable = false)
     @NotNull

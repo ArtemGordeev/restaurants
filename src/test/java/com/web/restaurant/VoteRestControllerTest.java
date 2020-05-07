@@ -3,7 +3,6 @@ package com.web.restaurant;
 
 import com.repository.VoteRepository;
 import com.web.AbstractControllerTest;
-import com.web.SecurityUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,7 +13,6 @@ import static com.TestData.VOTE_TO_MATCHER;
 import static com.TestUtil.userHttpBasic;
 import static com.UserTestData.ADMIN;
 import static com.UserTestData.ADMIN_ID;
-import static com.UserTestData.USER;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

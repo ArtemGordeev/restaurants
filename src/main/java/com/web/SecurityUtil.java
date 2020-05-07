@@ -2,26 +2,12 @@ package com.web;
 
 
 import com.AuthorizedUser;
-import com.model.AbstractBaseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import static java.util.Objects.requireNonNull;
 
 public class SecurityUtil {
-
-//    private static int id = AbstractBaseEntity.START_SEQ;
-//
-//    private SecurityUtil() {
-//    }
-//
-//    public static int authUserId() {
-//        return id;
-//    }
-//
-//    public static void setAuthUserId(int id) {
-//        SecurityUtil.id = id;
-//    }
 
     private SecurityUtil() {
     }

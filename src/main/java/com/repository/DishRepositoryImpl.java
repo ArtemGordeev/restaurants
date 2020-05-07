@@ -3,6 +3,7 @@ package com.repository;
 import com.model.Dish;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -38,7 +39,9 @@ public class DishRepositoryImpl implements DishRepository {
     @Override
     @Transactional
     public Dish save(Dish dish, int menuId) {
+        Assert.notNull(dish, "dish must not be null");
         dish.setMenu(crudMenuRepository.getOne(menuId));
-        return crudDishRepository.save(dish);
+        Dish save = crudDishRepository.save(dish);
+        return checkNotFoundWithId(save, save.id());
     }
 }

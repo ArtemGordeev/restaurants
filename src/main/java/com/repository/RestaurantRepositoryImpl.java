@@ -4,6 +4,7 @@ import com.model.Restaurant;
 import com.to.RestaurantTo;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -28,7 +29,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepository{
     @Override
     @Transactional
     public Restaurant save(Restaurant restaurant){
-        return restaurantRepository.save(restaurant);
+        Assert.notNull(restaurant, "restaurant must not be null");
+        Restaurant save = restaurantRepository.save(restaurant);
+        return checkNotFoundWithId(save, save.id());
     }
 
     @Override
@@ -52,7 +55,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepository{
 
     @Override
     public RestaurantTo winner(){
-        if( LocalDateTime.now().toLocalTime().compareTo(LocalTime.of(11, 0)) >= 0){
+        if( LocalTime.now().compareTo(LocalTime.of(11, 0)) >= 0){
             List<RestaurantTo> all = getAll();
             Optional<RestaurantTo> max = all.stream().max(Comparator.comparingInt(RestaurantTo::getVotes));
             return max.orElse(null);

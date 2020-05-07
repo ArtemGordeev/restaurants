@@ -1,25 +1,30 @@
 package com.model;
 
 import com.HasId;
+import com.View;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "dishes")
 public class Dish extends AbstractBaseEntity implements HasId {
     @Column(name = "description")
+    @NotBlank
     private String description;
 
     @Column(name = "price")
+    @Min(0)
     private int price; //in cents
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
+    @NotNull(groups = View.Persist.class)
     private Menu menu;
 
     public Dish() {

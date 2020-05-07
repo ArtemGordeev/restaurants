@@ -1,6 +1,5 @@
 package com.repository;
 
-import com.model.Restaurant;
 import com.model.Vote;
 import com.to.VoteTo;
 

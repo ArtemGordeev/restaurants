@@ -47,8 +47,7 @@ public class MenuController {
     }
 
     @GetMapping("/{restaurantId}/menus/update/{menuId}")
-    public String update(//@PathVariable("restaurantId") int restaurantId,
-                         @PathVariable("menuId") int menuId,
+    public String update(@PathVariable("menuId") int menuId,
                          Model model) {
         final Menu menu = menuRepository.get(menuId);
         model.addAttribute("menu", menu);
@@ -57,11 +56,9 @@ public class MenuController {
 
     @PostMapping("/{restaurantId}/menus/update/{menuId}")
     public String update(@PathVariable("restaurantId") int restaurantId,
-                         //@PathVariable("menuId") int menuId,
                          HttpServletRequest request) throws IOException {
         Menu menu = getMenu(request);
         int id = getId(request);
-        //int userId = SecurityUtil.authUserId();
         assureIdConsistent(menu, id);
 
         log.info("update {}", menu);
@@ -80,7 +77,6 @@ public class MenuController {
     public String create(@PathVariable("restaurantId") int restaurantId,
                          HttpServletRequest request) throws IOException {
         Menu menu = getMenu(request);
-        //int userId = SecurityUtil.authUserId();
         checkNew(menu);
         log.info("create {}", menu);
         menuRepository.save(menu, restaurantId);

@@ -1,17 +1,18 @@
 package com.web.restaurant;
 
+import com.View;
 import com.model.Dish;
 import com.model.Role;
 import com.model.User;
 import com.repository.DishRepository;
 import com.repository.UserRepository;
-import com.to.RestaurantTo;
 import com.web.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -35,9 +36,7 @@ public class DishRestController {
     }
 
     @GetMapping("/{restaurantId}/menus/{menuId}/dishes/{dishId}")
-    public Dish get(@PathVariable int restaurantId,
-                    @PathVariable int menuId,
-                    @PathVariable int dishId) {
+    public Dish get(@PathVariable int dishId) {
         Dish dish = dishRepository.get(dishId);
         log.info("get {}", dish);
         return dish;
@@ -45,9 +44,7 @@ public class DishRestController {
 
     @DeleteMapping("/{restaurantId}/menus/{menuId}/dishes/{dishId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int restaurantId,
-                       @PathVariable int menuId,
-                       @PathVariable int dishId) {
+    public void delete(@PathVariable int dishId) {
         log.info("delete {}", dishId);
         int userId = SecurityUtil.authUserId();
         User user = userRepository.get(userId);
@@ -57,8 +54,7 @@ public class DishRestController {
     }
 
     @GetMapping("/{restaurantId}/menus/{menuId}/dishes")
-    public List<Dish> getAll(@PathVariable int restaurantId,
-                             @PathVariable int menuId) {
+    public List<Dish> getAll(@PathVariable int menuId) {
         log.info("getAll");
         List<Dish> all = dishRepository.getAll(menuId);
         return all;
@@ -66,10 +62,8 @@ public class DishRestController {
 
     @PutMapping(value = "/{restaurantId}/menus/{menuId}/dishes/{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Dish dish,
-                       @PathVariable int restaurantId,
-                       @PathVariable int menuId,
-                       @PathVariable int dishId) {
+    public void update(@Validated(View.Web.class) @RequestBody Dish dish,
+                       @PathVariable int menuId) {
         int userId = SecurityUtil.authUserId();
         User user = userRepository.get(userId);
         if (user.getRoles().contains(Role.ADMIN)) {
@@ -79,8 +73,8 @@ public class DishRestController {
     }
 
     @PostMapping(value = "/{restaurantId}/menus/{menuId}/dishes", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> createWithLocation(@RequestBody Dish dish,
-                                                   @PathVariable int restaurantId,
+    public ResponseEntity<Dish> createWithLocation(@Validated @RequestBody Dish dish,
+                                                   //@PathVariable int restaurantId,
                                                    @PathVariable int menuId) {
         int userId = SecurityUtil.authUserId();
         User user = userRepository.get(userId);

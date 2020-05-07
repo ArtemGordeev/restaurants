@@ -74,10 +74,6 @@ public class Vote extends AbstractBaseEntity{
         this.user = user;
     }
 
-    public boolean isTodayVote(){
-        return date.equals(LocalDate.now());
-    }
-
     public boolean afterEleven(){
         return time.compareTo(LocalTime.of(11, 0)) >= 0;
     }

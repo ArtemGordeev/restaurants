@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -60,8 +61,7 @@ public class RestaurantRestController {
 
     @PutMapping(value = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Restaurant restaurant,
-                       @PathVariable int restaurantId) {
+    public void update(@Validated @RequestBody Restaurant restaurant) {
         int userId = SecurityUtil.authUserId();
         User user = userRepository.get(userId);
         if (user.getRoles().contains(Role.ADMIN)) {
@@ -71,7 +71,7 @@ public class RestaurantRestController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Restaurant> createWithLocation(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<Restaurant> createWithLocation(@Validated @RequestBody Restaurant restaurant) {
         int userId = SecurityUtil.authUserId();
         User user = userRepository.get(userId);
         if (user.getRoles().contains(Role.ADMIN)) {

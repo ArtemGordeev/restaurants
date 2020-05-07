@@ -1,9 +1,9 @@
 package com.repository;
 
 import com.model.Menu;
-import com.model.Restaurant;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -38,8 +38,10 @@ public class MenuRepositoryImpl implements MenuRepository {
     @Override
     @Transactional
     public Menu save(Menu menu, int restaurantId) {
+        Assert.notNull(menu, "menu must not be null");
         menu.setRestaurant(crudRestaurantRepository.getOne(restaurantId));
-        return crudMenuRepository.save(menu);
+        Menu save = crudMenuRepository.save(menu);
+        return checkNotFoundWithId(save, save.id());
     }
 
     @Override

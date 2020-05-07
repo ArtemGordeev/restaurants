@@ -4,7 +4,6 @@ import com.util.ValidationUtil;
 import com.util.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,22 +30,17 @@ public class ExceptionInfoHandler {
     private static final Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
     public static final String EXCEPTION_DUPLICATE_EMAIL = "User with this email already exists";
-    public static final String EXCEPTION_DUPLICATE_DATETIME = "You already have meal with this date/time";
 
     private static final Map<String, String> CONSTRAINS_I18N_MAP = Map.of(
-            "users_unique_email_idx", EXCEPTION_DUPLICATE_EMAIL,
-            "meals_unique_user_datetime_idx", EXCEPTION_DUPLICATE_DATETIME);
+            "users_unique_email_idx", EXCEPTION_DUPLICATE_EMAIL
+    );
 
-   // private final MessageSourceAccessor messageSourceAccessor;
-
-    public ExceptionInfoHandler(/*MessageSourceAccessor messageSourceAccessor*/) {
-        //this.messageSourceAccessor = messageSourceAccessor;
+    public ExceptionInfoHandler() {
     }
 
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<ErrorInfo> applicationError(HttpServletRequest req, ApplicationException appEx) {
-        ErrorInfo errorInfo = logAndGetErrorInfo(req, appEx, false, appEx.getType(),""
-                /*messageSourceAccessor.getMessage(appEx.getMsgCode(), appEx.getArgs())*/);
+        ErrorInfo errorInfo = logAndGetErrorInfo(req, appEx, false, appEx.getType(),"");
         return ResponseEntity.status(appEx.getType().getStatus()).body(errorInfo);
     }
 
@@ -58,7 +52,7 @@ public class ExceptionInfoHandler {
             String lowerCaseMsg = rootMsg.toLowerCase();
             for (Map.Entry<String, String> entry : CONSTRAINS_I18N_MAP.entrySet()) {
                 if (lowerCaseMsg.contains(entry.getKey())) {
-                    return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, ""/*messageSourceAccessor.getMessage(entry.getValue())*/);
+                    return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, "");
                 }
             }
         }
@@ -68,14 +62,7 @@ public class ExceptionInfoHandler {
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
     @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
     public ErrorInfo bindValidationError(HttpServletRequest req, Exception e) {
-        BindingResult result = e instanceof BindException ?
-                ((BindException) e).getBindingResult() : ((MethodArgumentNotValidException) e).getBindingResult();
-
-//        String[] details = result.getFieldErrors().stream()
-//                .map(/*messageSourceAccessor::getMessage*/ )
-//                .toArray(String[]::new);
-
-        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, ""/*details*/);
+        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, "");
     }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
@@ -93,8 +80,7 @@ public class ExceptionInfoHandler {
     //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
     private ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType, String... details) {
         Throwable rootCause = ValidationUtil.logAndGetRootCause(log, req, e, logException, errorType);
-        return new ErrorInfo(req.getRequestURL(), errorType,
-                /*messageSourceAccessor.getMessage(errorType.getErrorCode())*/"",
+        return new ErrorInfo(req.getRequestURL(), errorType, "",
                 details.length != 0 ? details : new String[]{ValidationUtil.getMessage(rootCause)});
     }
 
