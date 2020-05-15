@@ -27,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class DishRestControllerTest extends AbstractControllerTest {
 
     private static final String REST_URL = "/rest/restaurants/100002/menus/100003/dishes/";
+    private static final String REST_ADMIN_URL = "/rest/admin/restaurants/100002/menus/100003/dishes/";
 
     @Autowired
     private DishService dishService;
@@ -57,7 +58,7 @@ class DishRestControllerTest extends AbstractControllerTest {
 
     @Test
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL + DISH1_ID)
+        perform(MockMvcRequestBuilders.delete(REST_ADMIN_URL + DISH1_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> dishService.get(DISH1_ID));
@@ -65,7 +66,7 @@ class DishRestControllerTest extends AbstractControllerTest {
 
     @Test
     void deleteNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL + "100100")
+        perform(MockMvcRequestBuilders.delete(REST_ADMIN_URL + "100100")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isUnprocessableEntity());
     }
@@ -73,7 +74,7 @@ class DishRestControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Dish updated = new Dish(DISH1_ID, "New pizza", 200);
-        perform(MockMvcRequestBuilders.put(REST_URL + DISH1_ID).contentType(MediaType.APPLICATION_JSON)
+        perform(MockMvcRequestBuilders.put(REST_ADMIN_URL+ DISH1_ID).contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated))
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());
@@ -84,7 +85,7 @@ class DishRestControllerTest extends AbstractControllerTest {
     @Test
     void createWithLocation() throws Exception {
         Dish newDish = new Dish(null, "Big pizza", 200);
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_ADMIN_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newDish))
                 .with(userHttpBasic(ADMIN))

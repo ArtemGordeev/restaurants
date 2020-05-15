@@ -1,13 +1,8 @@
 package com.web.restaurant;
 
 import com.model.Restaurant;
-import com.model.Role;
-import com.model.User;
-import com.repository.RestaurantRepository;
-import com.repository.UserRepository;
 import com.service.RestaurantService;
 import com.to.RestaurantTo;
-import com.web.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -23,72 +18,56 @@ import java.util.List;
 @RestController
 @RequestMapping(value = RestaurantRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantRestController {
-    static final String REST_URL = "/rest/restaurants";
+    static final String REST_URL = "/rest";
 
     private final static Logger log = LoggerFactory.getLogger(RestaurantRestController.class);
 
     private RestaurantService restaurantService;
 
-    private UserRepository userRepository;
-
-    public RestaurantRestController(RestaurantService restaurantService, UserRepository userRepository) {
+    public RestaurantRestController(RestaurantService restaurantService) {
         this.restaurantService = restaurantService;
-        this.userRepository = userRepository;
     }
 
-    @GetMapping("/{restaurantId}")
+    @GetMapping("/restaurants/{restaurantId}")
     public Restaurant get(@PathVariable int restaurantId) {
         Restaurant restaurant = restaurantService.get(restaurantId);
         log.info("get {}", restaurantId);
         return restaurant;
     }
 
-    @DeleteMapping("/{restaurantId}")
+    @DeleteMapping("/admin/restaurants/{restaurantId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int restaurantId) {
         log.info("delete {}", restaurantId);
-        int userId = SecurityUtil.authUserId();
-        User user = userRepository.get(userId);
-        if (user.getRoles().contains(Role.ADMIN)) {
-            restaurantService.delete(restaurantId);
-        }
+        restaurantService.delete(restaurantId);
     }
 
-    @GetMapping
+    @GetMapping("/restaurants")
     public List<RestaurantTo> getAll() {
         log.info("getAll");
         return restaurantService.getAll();
     }
 
-    @PutMapping(value = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/admin/restaurants/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Validated @RequestBody Restaurant restaurant) {
-        int userId = SecurityUtil.authUserId();
-        User user = userRepository.get(userId);
-        if (user.getRoles().contains(Role.ADMIN)) {
-            log.info("update");
-            restaurantService.save(restaurant);
-        }
+        log.info("update");
+        restaurantService.save(restaurant);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/admin/restaurants", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> createWithLocation(@Validated @RequestBody Restaurant restaurant) {
-        int userId = SecurityUtil.authUserId();
-        User user = userRepository.get(userId);
-        if (user.getRoles().contains(Role.ADMIN)) {
-            log.info("create");
-            Restaurant created = restaurantService.save(restaurant);
+        log.info("create");
+        Restaurant created = restaurantService.save(restaurant);
 
-            URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path(REST_URL + "/{id}")
-                    .buildAndExpand(created.getId()).toUri();
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId()).toUri();
 
-            return ResponseEntity.created(uriOfNewResource).body(created);
-        }
-        return null;
+        return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    @GetMapping("/winner")
+    @GetMapping("/restaurants/winner")
     public RestaurantTo getWinner() {
         log.info("getWinner");
         return restaurantService.winner();

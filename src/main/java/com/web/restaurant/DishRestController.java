@@ -2,11 +2,7 @@ package com.web.restaurant;
 
 import com.View;
 import com.model.Dish;
-import com.model.Role;
-import com.model.User;
-import com.repository.UserRepository;
 import com.service.DishService;
-import com.web.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,72 +18,55 @@ import java.util.List;
 @RestController
 @RequestMapping(value = DishRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class DishRestController {
-    static final String REST_URL = "/rest/restaurants";
+    static final String REST_URL = "/rest";
 
     private final static Logger log = LoggerFactory.getLogger(DishRestController.class);
 
     private DishService dishService;
 
-    private UserRepository userRepository;
-
-    public DishRestController(DishService dishService, UserRepository userRepository) {
+    public DishRestController(DishService dishService) {
         this.dishService = dishService;
-        this.userRepository = userRepository;
     }
 
-    @GetMapping("/{restaurantId}/menus/{menuId}/dishes/{dishId}")
+    @GetMapping("/restaurants/{restaurantId}/menus/{menuId}/dishes/{dishId}")
     public Dish get(@PathVariable int dishId) {
         Dish dish = dishService.get(dishId);
         log.info("get {}", dish);
         return dish;
     }
 
-    @DeleteMapping("/{restaurantId}/menus/{menuId}/dishes/{dishId}")
+    @DeleteMapping("/admin/restaurants/{restaurantId}/menus/{menuId}/dishes/{dishId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int dishId) {
         log.info("delete {}", dishId);
-        int userId = SecurityUtil.authUserId();
-        User user = userRepository.get(userId);
-        if (user.getRoles().contains(Role.ADMIN)) {
-            dishService.delete(dishId);
-        }
+        dishService.delete(dishId);
     }
 
-    @GetMapping("/{restaurantId}/menus/{menuId}/dishes")
+    @GetMapping("/restaurants/{restaurantId}/menus/{menuId}/dishes")
     public List<Dish> getAll(@PathVariable int menuId) {
         log.info("getAll");
-        List<Dish> all = dishService.getAll(menuId);
-        return all;
+        return dishService.getAll(menuId);
     }
 
-    @PutMapping(value = "/{restaurantId}/menus/{menuId}/dishes/{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/admin/restaurants/{restaurantId}/menus/{menuId}/dishes/{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@Validated(View.Web.class) @RequestBody Dish dish,
                        @PathVariable int menuId) {
-        int userId = SecurityUtil.authUserId();
-        User user = userRepository.get(userId);
-        if (user.getRoles().contains(Role.ADMIN)) {
-            log.info("update");
-            dishService.save(dish, menuId);
-        }
+        log.info("update");
+        dishService.save(dish, menuId);
     }
 
-    @PostMapping(value = "/{restaurantId}/menus/{menuId}/dishes", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/admin/restaurants/{restaurantId}/menus/{menuId}/dishes", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Dish> createWithLocation(@Validated @RequestBody Dish dish,
                                                    //@PathVariable int restaurantId,
                                                    @PathVariable int menuId) {
-        int userId = SecurityUtil.authUserId();
-        User user = userRepository.get(userId);
-        if (user.getRoles().contains(Role.ADMIN)) {
-            log.info("create");
-            Dish created = dishService.save(dish, menuId);
+        log.info("create");
+        Dish created = dishService.save(dish, menuId);
 
-            URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path(REST_URL + "/{id}")
-                    .buildAndExpand(created.getId()).toUri();
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId()).toUri();
 
-            return ResponseEntity.created(uriOfNewResource).body(created);
-        }
-        return null;
+        return ResponseEntity.created(uriOfNewResource).body(created);
     }
 }
