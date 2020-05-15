@@ -25,7 +25,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void voteRestaurant() throws Exception {
-        perform(MockMvcRequestBuilders.post("/rest/restaurants/vote/" + RESTAURANT_ID)
+        perform(MockMvcRequestBuilders.post("/rest/vote/" + RESTAURANT_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());
         perform(MockMvcRequestBuilders.get("/rest/users/"+ ADMIN_ID + "/votes")
@@ -38,16 +38,16 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void voteAgain() throws Exception {
-        perform(MockMvcRequestBuilders.post("/rest/restaurants/vote/" + RESTAURANT_ID)
+        perform(MockMvcRequestBuilders.post("/rest/vote/" + RESTAURANT_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());
         if(LocalTime.now().compareTo(LocalTime.of(11, 0)) > 0) {
-            perform(MockMvcRequestBuilders.post("/rest/restaurants/vote/" + RESTAURANT_ID)
+            perform(MockMvcRequestBuilders.post("/rest/vote/" + RESTAURANT_ID)
                     .with(userHttpBasic(ADMIN)))
                     .andExpect(status().isUnprocessableEntity());
         }
         else {
-            perform(MockMvcRequestBuilders.post("/rest/restaurants/vote/" + RESTAURANT_ID)
+            perform(MockMvcRequestBuilders.post("/rest/vote/" + RESTAURANT_ID)
                     .with(userHttpBasic(ADMIN)))
                     .andExpect(status().isNoContent());
             perform(MockMvcRequestBuilders.get("/rest/users/"+ ADMIN_ID + "/votes")
@@ -61,7 +61,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getUnauth() throws Exception {
-        perform(MockMvcRequestBuilders.get("/rest/restaurants/vote/" + RESTAURANT_ID))
+        perform(MockMvcRequestBuilders.get("/rest/vote/" + RESTAURANT_ID))
                 .andExpect(status().isUnauthorized());
     }
 }

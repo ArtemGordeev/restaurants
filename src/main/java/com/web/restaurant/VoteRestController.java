@@ -33,7 +33,7 @@ public class VoteRestController {
         return voteRepository.getAll(userId);
     }
 
-    @PostMapping("/restaurants/vote/{restaurantId}")
+    @PostMapping("/vote/{restaurantId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void voteRestaurant(@PathVariable("restaurantId") int restaurantId) {
         log.info("vote for restaurant");

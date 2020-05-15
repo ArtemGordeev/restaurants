@@ -175,10 +175,10 @@ P.P.S.: Asume that your API will be used by a frontend developer to build fronte
 
 #### Vote for restaurant:
 - Method: POST	
-- URL: http://localhost:8080/graduation/rest/restaurants/vote/100002
+- URL: http://localhost:8080/graduation/rest/vote/100002
 - Data parameters: none
 - Success Response: 204 No Content
-- curl -s -X POST http://localhost:8080/graduation/rest/restaurants/vote/100002 --user admin@gmail.com:admin
+- curl -s -X POST http://localhost:8080/graduation/rest/vote/100002 --user admin@gmail.com:admin
 
 -----------------------------
 
