@@ -1,6 +1,7 @@
 package com.util;
 
 import com.HasId;
+import com.model.Vote;
 import com.util.exception.ErrorType;
 import com.util.exception.IllegalRequestDataException;
 import com.util.exception.NotFoundException;
@@ -32,6 +33,12 @@ public class ValidationUtil {
     public static void checkNotFound(boolean found, String arg) {
         if (!found) {
             throw new NotFoundException(arg);
+        }
+    }
+
+    public static void checkVote(Vote vote) {
+        if(vote == null){
+            throw  new IllegalRequestDataException("Change vote after 11 o'clock is forbidden");
         }
     }
 

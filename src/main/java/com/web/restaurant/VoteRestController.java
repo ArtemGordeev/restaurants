@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.util.ValidationUtil.checkVote;
+
 @RestController
 @RequestMapping(value = VoteRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteRestController {
@@ -36,6 +38,6 @@ public class VoteRestController {
     public void voteRestaurant(@PathVariable("restaurantId") int restaurantId) {
         log.info("vote for restaurant");
         int userId = SecurityUtil.authUserId();
-        voteRepository.save(restaurantId, userId);
+        checkVote(voteRepository.save(restaurantId, userId));
     }
 }
