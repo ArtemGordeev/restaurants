@@ -5,6 +5,7 @@ import com.model.Role;
 import com.model.User;
 import com.repository.RestaurantRepository;
 import com.repository.UserRepository;
+import com.service.RestaurantService;
 import com.to.RestaurantTo;
 import com.web.SecurityUtil;
 import org.slf4j.Logger;
@@ -26,18 +27,18 @@ public class RestaurantRestController {
 
     private final static Logger log = LoggerFactory.getLogger(RestaurantRestController.class);
 
-    private RestaurantRepository restaurantRepository;
+    private RestaurantService restaurantService;
 
     private UserRepository userRepository;
 
-    public RestaurantRestController(RestaurantRepository restaurantRepository, UserRepository userRepository) {
-        this.restaurantRepository = restaurantRepository;
+    public RestaurantRestController(RestaurantService restaurantService, UserRepository userRepository) {
+        this.restaurantService = restaurantService;
         this.userRepository = userRepository;
     }
 
     @GetMapping("/{restaurantId}")
     public Restaurant get(@PathVariable int restaurantId) {
-        Restaurant restaurant = restaurantRepository.get(restaurantId);
+        Restaurant restaurant = restaurantService.get(restaurantId);
         log.info("get {}", restaurantId);
         return restaurant;
     }
@@ -49,14 +50,14 @@ public class RestaurantRestController {
         int userId = SecurityUtil.authUserId();
         User user = userRepository.get(userId);
         if (user.getRoles().contains(Role.ADMIN)) {
-            restaurantRepository.delete(restaurantId);
+            restaurantService.delete(restaurantId);
         }
     }
 
     @GetMapping
     public List<RestaurantTo> getAll() {
         log.info("getAll");
-        return restaurantRepository.getAll();
+        return restaurantService.getAll();
     }
 
     @PutMapping(value = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -66,7 +67,7 @@ public class RestaurantRestController {
         User user = userRepository.get(userId);
         if (user.getRoles().contains(Role.ADMIN)) {
             log.info("update");
-            restaurantRepository.save(restaurant);
+            restaurantService.save(restaurant);
         }
     }
 
@@ -76,7 +77,7 @@ public class RestaurantRestController {
         User user = userRepository.get(userId);
         if (user.getRoles().contains(Role.ADMIN)) {
             log.info("create");
-            Restaurant created = restaurantRepository.save(restaurant);
+            Restaurant created = restaurantService.save(restaurant);
 
             URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path(REST_URL + "/{id}")
@@ -90,6 +91,6 @@ public class RestaurantRestController {
     @GetMapping("/winner")
     public RestaurantTo getWinner() {
         log.info("getWinner");
-        return restaurantRepository.winner();
+        return restaurantService.winner();
     }
 }

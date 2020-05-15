@@ -2,7 +2,7 @@ package com.web.restaurant;
 
 
 import com.model.Menu;
-import com.repository.MenuRepository;
+import com.service.MenuService;
 import com.util.exception.NotFoundException;
 import com.web.AbstractControllerTest;
 import com.web.json.JsonUtil;
@@ -30,7 +30,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     private static final String REST_URL = "/rest/restaurants/100002/menus/";
 
     @Autowired
-    private MenuRepository menuRepository;
+    private MenuService menuService;
 
     @Test
     void get() throws Exception {
@@ -61,7 +61,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.delete(REST_URL + MENU_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());
-        assertThrows(NotFoundException.class, () -> menuRepository.get(MENU_ID));
+        assertThrows(NotFoundException.class, () -> menuService.get(MENU_ID));
     }
 
     @Test
@@ -79,7 +79,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());
 
-        MENU_MATCHER.assertMatch(menuRepository.get(MENU_ID), updated);
+        MENU_MATCHER.assertMatch(menuService.get(MENU_ID), updated);
     }
 
     @Test
@@ -95,7 +95,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
         int newId = created.getId();
         newMenu.setId(newId);
         MENU_MATCHER.assertMatch(created, newMenu);
-        MENU_MATCHER.assertMatch(menuRepository.get(newId), newMenu);
+        MENU_MATCHER.assertMatch(menuService.get(newId), newMenu);
     }
 
     @Test

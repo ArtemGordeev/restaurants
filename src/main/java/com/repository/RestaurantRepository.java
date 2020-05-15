@@ -8,7 +8,7 @@ import java.util.List;
 public interface RestaurantRepository {
     Restaurant save(Restaurant restaurant);
 
-    void delete(int id);
+    boolean delete(int id);
 
     Restaurant get(int id);
 

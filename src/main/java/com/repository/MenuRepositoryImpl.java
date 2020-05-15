@@ -26,22 +26,20 @@ public class MenuRepositoryImpl implements MenuRepository {
     }
 
     @Override
-    public void delete(int id) {
-        checkNotFoundWithId(crudMenuRepository.delete(id) != 0, id);
+    public boolean delete(int id) {
+        return crudMenuRepository.delete(id) != 0;
     }
 
     @Override
     public Menu get(int id) {
-        return checkNotFoundWithId(crudMenuRepository.findById(id).orElse(null), id);
+        return crudMenuRepository.findById(id).orElse(null);
     }
 
     @Override
     @Transactional
     public Menu save(Menu menu, int restaurantId) {
-        Assert.notNull(menu, "menu must not be null");
         menu.setRestaurant(crudRestaurantRepository.getOne(restaurantId));
-        Menu save = crudMenuRepository.save(menu);
-        return checkNotFoundWithId(save, save.id());
+        return crudMenuRepository.save(menu);
     }
 
     @Override

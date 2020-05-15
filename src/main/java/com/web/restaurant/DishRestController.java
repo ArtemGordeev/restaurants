@@ -4,8 +4,8 @@ import com.View;
 import com.model.Dish;
 import com.model.Role;
 import com.model.User;
-import com.repository.DishRepository;
 import com.repository.UserRepository;
+import com.service.DishService;
 import com.web.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +26,18 @@ public class DishRestController {
 
     private final static Logger log = LoggerFactory.getLogger(DishRestController.class);
 
-    private DishRepository dishRepository;
+    private DishService dishService;
 
     private UserRepository userRepository;
 
-    public DishRestController(DishRepository dishRepository, UserRepository userRepository) {
-        this.dishRepository = dishRepository;
+    public DishRestController(DishService dishService, UserRepository userRepository) {
+        this.dishService = dishService;
         this.userRepository = userRepository;
     }
 
     @GetMapping("/{restaurantId}/menus/{menuId}/dishes/{dishId}")
     public Dish get(@PathVariable int dishId) {
-        Dish dish = dishRepository.get(dishId);
+        Dish dish = dishService.get(dishId);
         log.info("get {}", dish);
         return dish;
     }
@@ -49,14 +49,14 @@ public class DishRestController {
         int userId = SecurityUtil.authUserId();
         User user = userRepository.get(userId);
         if (user.getRoles().contains(Role.ADMIN)) {
-            dishRepository.delete(dishId);
+            dishService.delete(dishId);
         }
     }
 
     @GetMapping("/{restaurantId}/menus/{menuId}/dishes")
     public List<Dish> getAll(@PathVariable int menuId) {
         log.info("getAll");
-        List<Dish> all = dishRepository.getAll(menuId);
+        List<Dish> all = dishService.getAll(menuId);
         return all;
     }
 
@@ -68,7 +68,7 @@ public class DishRestController {
         User user = userRepository.get(userId);
         if (user.getRoles().contains(Role.ADMIN)) {
             log.info("update");
-            dishRepository.save(dish, menuId);
+            dishService.save(dish, menuId);
         }
     }
 
@@ -80,7 +80,7 @@ public class DishRestController {
         User user = userRepository.get(userId);
         if (user.getRoles().contains(Role.ADMIN)) {
             log.info("create");
-            Dish created = dishRepository.save(dish, menuId);
+            Dish created = dishService.save(dish, menuId);
 
             URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path(REST_URL + "/{id}")

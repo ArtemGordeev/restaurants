@@ -27,21 +27,19 @@ public class DishRepositoryImpl implements DishRepository {
     }
 
     @Override
-    public void delete(int id) {
-        checkNotFoundWithId(crudDishRepository.delete(id) != 0, id);
+    public boolean delete(int id) {
+        return crudDishRepository.delete(id) != 0;
     }
 
     @Override
     public Dish get(int dishId) {
-        return checkNotFoundWithId(crudDishRepository.findById(dishId).orElse(null), dishId);
+        return crudDishRepository.findById(dishId).orElse(null);
     }
 
     @Override
     @Transactional
     public Dish save(Dish dish, int menuId) {
-        Assert.notNull(dish, "dish must not be null");
         dish.setMenu(crudMenuRepository.getOne(menuId));
-        Dish save = crudDishRepository.save(dish);
-        return checkNotFoundWithId(save, save.id());
+        return crudDishRepository.save(dish);
     }
 }

@@ -29,14 +29,12 @@ public class RestaurantRepositoryImpl implements RestaurantRepository{
     @Override
     @Transactional
     public Restaurant save(Restaurant restaurant){
-        Assert.notNull(restaurant, "restaurant must not be null");
-        Restaurant save = restaurantRepository.save(restaurant);
-        return checkNotFoundWithId(save, save.id());
+        return restaurantRepository.save(restaurant);
     }
 
     @Override
     public Restaurant get(int id) {
-        return checkNotFoundWithId(restaurantRepository.findById(id).orElse(null), id);
+        return restaurantRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -49,8 +47,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepository{
     }
 
     @Override
-    public void delete(int id) {
-        checkNotFoundWithId(restaurantRepository.delete(id) != 0, id);
+    public boolean delete(int id) {
+        return restaurantRepository.delete(id) != 0;
     }
 
     @Override

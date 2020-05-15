@@ -6,6 +6,7 @@ import com.model.Role;
 import com.model.User;
 import com.repository.MenuRepository;
 import com.repository.UserRepository;
+import com.service.MenuService;
 import com.web.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +27,18 @@ public class MenuRestController {
 
     private final static Logger log = LoggerFactory.getLogger(MenuRestController.class);
 
-    private MenuRepository menuRepository;
+    private MenuService menuService;
 
     private UserRepository userRepository;
 
-    public MenuRestController(MenuRepository menuRepository, UserRepository userRepository) {
-        this.menuRepository = menuRepository;
+    public MenuRestController(MenuService menuService, UserRepository userRepository) {
+        this.menuService = menuService;
         this.userRepository = userRepository;
     }
 
     @GetMapping("/{restaurantId}/menus/{menuId}")
     public Menu get(@PathVariable int menuId) {
-        Menu menu = menuRepository.get(menuId);
+        Menu menu = menuService.get(menuId);
         log.info("get {}", menu);
         return menu;
     }
@@ -49,14 +50,14 @@ public class MenuRestController {
         int userId = SecurityUtil.authUserId();
         User user = userRepository.get(userId);
         if (user.getRoles().contains(Role.ADMIN)) {
-            menuRepository.delete(menuId);
+            menuService.delete(menuId);
         }
     }
 
     @GetMapping("/{restaurantId}/menus")
     public List<Menu> getAll(@PathVariable int restaurantId) {
         log.info("getAll");
-        List<Menu> all = menuRepository.getAll(restaurantId);
+        List<Menu> all = menuService.getAll(restaurantId);
         return all;
     }
 
@@ -68,7 +69,7 @@ public class MenuRestController {
         User user = userRepository.get(userId);
         if (user.getRoles().contains(Role.ADMIN)) {
             log.info("update");
-            menuRepository.save(menu, restaurantId);
+            menuService.save(menu, restaurantId);
         }
     }
 
@@ -79,7 +80,7 @@ public class MenuRestController {
         User user = userRepository.get(userId);
         if (user.getRoles().contains(Role.ADMIN)) {
             log.info("create");
-            Menu created = menuRepository.save(menu, restaurantId);
+            Menu created = menuService.save(menu, restaurantId);
 
             URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path(REST_URL + "/{id}")
@@ -93,6 +94,6 @@ public class MenuRestController {
     @GetMapping("/{restaurantId}/menus/today")
     public Menu getToday(@PathVariable int restaurantId) {
         log.info("get today's menu");
-        return menuRepository.getTodayMenu(restaurantId);
+        return menuService.getTodayMenu(restaurantId);
     }
 }

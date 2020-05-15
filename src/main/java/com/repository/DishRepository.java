@@ -7,7 +7,7 @@ import java.util.List;
 public interface DishRepository {
     Dish save(Dish dish, int menuId);
 
-    void delete(int id);
+    boolean delete(int id);
 
     Dish get(int id);
 

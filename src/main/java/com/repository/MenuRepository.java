@@ -7,7 +7,7 @@ import java.util.List;
 public interface MenuRepository {
     Menu save(Menu menu, int restaurantId);
 
-    void delete(int id);
+    boolean delete(int id);
 
     Menu get(int id);
 
