@@ -3,7 +3,6 @@ package com.web.restaurant;
 
 import com.TestData;
 import com.model.Dish;
-import com.repository.DishRepository;
 import com.service.DishService;
 import com.util.exception.NotFoundException;
 import com.web.AbstractControllerTest;
@@ -26,8 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class DishRestControllerTest extends AbstractControllerTest {
 
-    private static final String REST_URL = "/rest/restaurants/100002/menus/100003/dishes/";
-    private static final String REST_ADMIN_URL = "/rest/admin/restaurants/100002/menus/100003/dishes/";
+    private static final String REST_URL = "/rest/restaurants/100003/menus/100005/dishes/";
+    private static final String REST_ADMIN_URL = "/rest/admin/restaurants/100003/menus/100005/dishes/";
 
     @Autowired
     private DishService dishService;

@@ -85,7 +85,7 @@ public class UserServiceTest {
     @Test
     void getAll() throws Exception {
         List<User> all = service.getAll();
-        USER_MATCHER.assertMatch(all, ADMIN, USER);
+        USER_MATCHER.assertMatch(all, ADMIN, USER, USER2);
     }
 
 //    @Test

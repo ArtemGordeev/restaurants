@@ -12,8 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.List;
-
 import static com.TestData.*;
 import static com.TestUtil.readFromJson;
 import static com.TestUtil.userHttpBasic;
@@ -105,7 +103,7 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_TO_MATCHER.contentJson(RESTAURANTS));
+                .andExpect(RESTAURANT_MATCHER.contentJson(RESTAURANTS));
     }
 
     @Test
@@ -115,6 +113,6 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(RESTAURANT_MATCHER_INCLUDE_MENU.contentJson(List.of(RESTAURANT)));
+                .andExpect(RESTAURANT_MATCHER_INCLUDE_MENU.contentJson(RESTAURANTS));
     }
 }

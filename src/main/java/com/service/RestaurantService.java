@@ -2,7 +2,6 @@ package com.service;
 
 import com.model.Restaurant;
 import com.repository.RestaurantRepository;
-import com.to.RestaurantTo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -29,16 +28,12 @@ public class RestaurantService {
         return checkNotFoundWithId(restaurantRepository.get(id), id);
     }
 
-    public List<RestaurantTo> getAll() {
+    public List<Restaurant> getAll() {
         return restaurantRepository.getAll();
     }
 
     public void delete(int id) {
         checkNotFoundWithId(restaurantRepository.delete(id), id);
-    }
-
-    public RestaurantTo winner(){
-        return restaurantRepository.winner();
     }
 
     public List<Restaurant> getAllWithTodayMenu() {

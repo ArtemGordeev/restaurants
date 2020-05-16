@@ -3,14 +3,12 @@ package com.repository;
 import com.model.Restaurant;
 import com.model.User;
 import com.model.Vote;
-import com.to.VoteTo;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 public class VoteRepositoryImpl implements VoteRepository{
@@ -28,12 +26,12 @@ public class VoteRepositoryImpl implements VoteRepository{
     }
 
     @Override
-    @Transactional
-    public List<VoteTo> getAll(int userId) {
-        List<Vote> all = crudVoteRepository.findAllByUserId(userId);
-        return all.stream()
-                .map(vote -> new VoteTo(vote.getId(), vote.getDate(), vote.getTime(), vote.getRestaurant().getTitle(), vote.getUser()))
-                .collect(Collectors.toList());
+    public List<Vote> getAll() {
+         return crudVoteRepository.getAll();
+    }
+
+    public List<Vote> getAllByDate(LocalDate localDate) {
+        return crudVoteRepository.getAllByDate(localDate);
     }
 
     @Override

@@ -77,4 +77,15 @@ public class Vote extends AbstractBaseEntity{
     public boolean afterEleven(){
         return time.compareTo(LocalTime.of(11, 0)) >= 0;
     }
+
+    @Override
+    public String toString() {
+        return "Vote{" +
+                "id=" + id +
+                ", date=" + date +
+                ", time=" + time +
+                ", restaurant=" + restaurant +
+                ", user=" + user +
+                '}';
+    }
 }

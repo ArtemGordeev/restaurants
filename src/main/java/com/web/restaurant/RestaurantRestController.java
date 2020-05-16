@@ -2,7 +2,6 @@ package com.web.restaurant;
 
 import com.model.Restaurant;
 import com.service.RestaurantService;
-import com.to.RestaurantTo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -43,7 +42,7 @@ public class RestaurantRestController {
     }
 
     @GetMapping("/restaurants")
-    public List<RestaurantTo> getAll() {
+    public List<Restaurant> getAll() {
         log.info("getAll");
         return restaurantService.getAll();
     }
@@ -65,12 +64,6 @@ public class RestaurantRestController {
                 .buildAndExpand(created.getId()).toUri();
 
         return ResponseEntity.created(uriOfNewResource).body(created);
-    }
-
-    @GetMapping("/restaurants/winner")
-    public RestaurantTo getWinner() {
-        log.info("getWinner");
-        return restaurantService.winner();
     }
 
     @GetMapping("/restaurants/today")

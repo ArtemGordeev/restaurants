@@ -14,12 +14,13 @@ import static com.TestData.RESTAURANT_ID;
 import static com.TestData.VOTE_TO_MATCHER;
 import static com.TestUtil.userHttpBasic;
 import static com.UserTestData.ADMIN;
-import static com.UserTestData.ADMIN_ID;
+import static com.util.VoteUtil.getVoteTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class VoteRestControllerTest extends AbstractControllerTest {
+
     @Autowired
     private VoteRepository voteRepository;
 
@@ -28,12 +29,12 @@ class VoteRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.post("/rest/vote/" + RESTAURANT_ID)
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());
-        perform(MockMvcRequestBuilders.get("/rest/users/"+ ADMIN_ID + "/votes")
+        perform(MockMvcRequestBuilders.get("/rest/votes")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VOTE_TO_MATCHER.contentJson(voteRepository.getAll(ADMIN_ID)));
+                .andExpect(VOTE_TO_MATCHER.contentJson(getVoteTo(voteRepository.getAll())));
     }
 
     @Test
@@ -50,12 +51,12 @@ class VoteRestControllerTest extends AbstractControllerTest {
             perform(MockMvcRequestBuilders.post("/rest/vote/" + RESTAURANT_ID)
                     .with(userHttpBasic(ADMIN)))
                     .andExpect(status().isNoContent());
-            perform(MockMvcRequestBuilders.get("/rest/users/"+ ADMIN_ID + "/votes")
+            perform(MockMvcRequestBuilders.get("/rest/votes")
                     .with(userHttpBasic(ADMIN)))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                    .andExpect(VOTE_TO_MATCHER.contentJson(voteRepository.getAll(ADMIN_ID)));
+                    .andExpect(VOTE_TO_MATCHER.contentJson(getVoteTo(voteRepository.getAll())));
         }
     }
 
@@ -63,5 +64,19 @@ class VoteRestControllerTest extends AbstractControllerTest {
     void getUnauth() throws Exception {
         perform(MockMvcRequestBuilders.get("/rest/vote/" + RESTAURANT_ID))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void getAllByDate() throws Exception{
+        perform(MockMvcRequestBuilders.post("/rest/vote/" + RESTAURANT_ID)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isNoContent());
+        perform(MockMvcRequestBuilders.get("/rest/votes")
+                .param("date", "2020-05-16")
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(VOTE_TO_MATCHER.contentJson(getVoteTo(voteRepository.getAll())));
     }
 }

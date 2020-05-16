@@ -15,6 +15,12 @@ public interface CrudVoteRepository extends JpaRepository<Vote, Integer> {
 
     Vote findByUserIdAndDateIsLike(int userId, LocalDate date);
 
-    @Query("SELECT COUNT(v) FROM Vote v WHERE v.restaurant.id=:restaurantId and v.date = current_date"  )
+    @Query("SELECT COUNT(v) FROM Vote v WHERE v.restaurant.id=:restaurantId and v.date = current_date")
     int countPerToday(@Param("restaurantId") int restaurantId);
+
+    @Query("SELECT v FROM Vote v left join fetch v.restaurant WHERE v.date=:localDate")
+    List<Vote> getAllByDate(@Param("localDate") LocalDate localDate);
+
+    @Query("SELECT v FROM Vote v left join fetch v.restaurant")
+    List<Vote> getAll();
 }

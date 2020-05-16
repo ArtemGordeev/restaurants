@@ -5,6 +5,7 @@ import com.HasId;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -74,8 +75,20 @@ public class Restaurant extends AbstractBaseEntity implements HasId {
         return "Restaurant{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-//                ", menus=" + menus +
-//                ", votes=" + votes +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Restaurant that = (Restaurant) o;
+        return Objects.equals(title, that.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), title);
     }
 }

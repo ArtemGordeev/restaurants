@@ -27,8 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class MenuRestControllerTest extends AbstractControllerTest {
 
-    private static final String REST_URL = "/rest/restaurants/100002/menus/";
-    private static final String REST_ADMIN_URL = "/rest/admin/restaurants/100002/menus/";
+    private static final String REST_URL = "/rest/restaurants/100003/menus/";
+    private static final String REST_ADMIN_URL = "/rest/admin/restaurants/100003/menus/";
 
     @Autowired
     private MenuService menuService;
