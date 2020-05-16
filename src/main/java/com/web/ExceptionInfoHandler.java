@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.util.exception.ErrorType.*;
@@ -30,9 +33,11 @@ public class ExceptionInfoHandler {
     private static final Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
     public static final String EXCEPTION_DUPLICATE_EMAIL = "User with this email already exists";
+    public static final String EXCEPTION_DUPLICATE_MENU = "Restaurant can have only one menu per day";
 
     private static final Map<String, String> CONSTRAINS_I18N_MAP = Map.of(
-            "users_unique_email_idx", EXCEPTION_DUPLICATE_EMAIL
+            "users_unique_email_idx", EXCEPTION_DUPLICATE_EMAIL,
+            "menus_unique_restaurant_id_date_idx", EXCEPTION_DUPLICATE_MENU
     );
 
     public ExceptionInfoHandler() {
@@ -40,7 +45,7 @@ public class ExceptionInfoHandler {
 
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<ErrorInfo> applicationError(HttpServletRequest req, ApplicationException appEx) {
-        ErrorInfo errorInfo = logAndGetErrorInfo(req, appEx, false, appEx.getType(),"");
+        ErrorInfo errorInfo = logAndGetErrorInfo(req, appEx, false, appEx.getType(), "");
         return ResponseEntity.status(appEx.getType().getStatus()).body(errorInfo);
     }
 
@@ -52,7 +57,7 @@ public class ExceptionInfoHandler {
             String lowerCaseMsg = rootMsg.toLowerCase();
             for (Map.Entry<String, String> entry : CONSTRAINS_I18N_MAP.entrySet()) {
                 if (lowerCaseMsg.contains(entry.getKey())) {
-                    return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, "");
+                    return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, entry.getValue());
                 }
             }
         }
@@ -62,7 +67,13 @@ public class ExceptionInfoHandler {
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
     @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
     public ErrorInfo bindValidationError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, "");
+        BindingResult result = e instanceof BindException ?
+                ((BindException) e).getBindingResult() : ((MethodArgumentNotValidException) e).getBindingResult();
+        List<String> details = new ArrayList<>();
+        for (FieldError fieldError : result.getFieldErrors()) {
+            if (fieldError.getField().equals("email")) details.add(EXCEPTION_DUPLICATE_EMAIL);
+        }
+        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, details.toArray(String[]::new));
     }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
