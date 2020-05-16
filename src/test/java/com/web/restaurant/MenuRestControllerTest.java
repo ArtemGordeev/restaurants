@@ -111,12 +111,11 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getTodayMenuWithDishes() throws Exception{
-        MENU.setDishes(DISHES);
         perform(MockMvcRequestBuilders.get(REST_URL+"today")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MENU_MATCHER.contentJson(MENU));
+                .andExpect(MENU_MATCHER_INCLUDE_DISHES.contentJson(MENU));
     }
 }

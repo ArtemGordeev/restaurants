@@ -136,6 +136,14 @@ P.P.S.: Asume that your API will be used by a frontend developer to build fronte
 - Success Response: 200 OK, Content: [{"id": 100002,"title": "KFC","votes": 0}, …]
 - curl -s http://localhost:8080/graduation/rest/restaurants --user admin@gmail.com:admin
 
+#### Get all with today menu:
+- Method: GET	
+- URL: http://localhost:8080/graduation/rest/restaurants/today
+- Data parameters: none
+- Success Response: 200 OK, Content: [{"id": 100002,"title": "KFC","menus": [{"id": 100003,"title": "Monday","dishes": [{"id": 100004,"description": "Pizza","price": 150},{"id": 100005,
+"description": "Tea","price": 50}],"date": "2020-05-16"}],"votes": null}]
+- curl -s http://localhost:8080/graduation/rest/restaurants/today --user admin@gmail.com:admin
+
 #### Get winner:
 - Method: GET	
 - URL: http://localhost:8080/graduation/rest/restaurants/winner

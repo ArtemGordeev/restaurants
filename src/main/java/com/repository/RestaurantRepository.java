@@ -15,4 +15,6 @@ public interface RestaurantRepository {
     List<RestaurantTo> getAll();
 
     RestaurantTo winner();
+
+    List<Restaurant> getAllWithTodayMenu();
 }

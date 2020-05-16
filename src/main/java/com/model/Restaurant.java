@@ -72,8 +72,10 @@ public class Restaurant extends AbstractBaseEntity implements HasId {
     @Override
     public String toString() {
         return "Restaurant{" +
-                ", id=" + id +
-                "title='" + title  +
+                "id=" + id +
+                ", title='" + title + '\'' +
+//                ", menus=" + menus +
+//                ", votes=" + votes +
                 '}';
     }
 }

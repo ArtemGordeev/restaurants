@@ -40,4 +40,8 @@ public class RestaurantService {
     public RestaurantTo winner(){
         return restaurantRepository.winner();
     }
+
+    public List<Restaurant> getAllWithTodayMenu() {
+        return restaurantRepository.getAllWithTodayMenu();
+    }
 }

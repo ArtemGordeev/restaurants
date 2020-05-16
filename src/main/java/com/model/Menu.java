@@ -2,6 +2,7 @@ package com.model;
 
 import com.HasId;
 import com.View;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -26,6 +27,7 @@ public class Menu extends AbstractBaseEntity implements HasId {
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull(groups = View.Persist.class)
+    @JsonIgnore
     private Restaurant restaurant;
 
     @Column(name = "date", nullable = false)

@@ -72,4 +72,9 @@ public class RestaurantRestController {
         log.info("getWinner");
         return restaurantService.winner();
     }
+
+    @GetMapping("/restaurants/today")
+    public List<Restaurant> getAllWithTodayMenu() {
+        return restaurantService.getAllWithTodayMenu();
+    }
 }

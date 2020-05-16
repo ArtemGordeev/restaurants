@@ -15,8 +15,10 @@ import static com.model.AbstractBaseEntity.START_SEQ;
 public class TestData {
 
     public static TestMatcher<Dish> DISH_MATCHER = TestMatcher.usingFieldsComparator(Dish.class, "menu");
-    public static TestMatcher<Menu> MENU_MATCHER = TestMatcher.usingFieldsComparator(Menu.class, "restaurant");
+    public static TestMatcher<Menu> MENU_MATCHER = TestMatcher.usingFieldsComparator(Menu.class, "dishes", "restaurant");
+    public static TestMatcher<Menu> MENU_MATCHER_INCLUDE_DISHES = TestMatcher.usingFieldsComparator(Menu.class, "dishes", "restaurant");
     public static TestMatcher<Restaurant> RESTAURANT_MATCHER = TestMatcher.usingFieldsComparator(Restaurant.class, "menus", "votes");
+    public static TestMatcher<Restaurant> RESTAURANT_MATCHER_INCLUDE_MENU = TestMatcher.usingFieldsComparator(Restaurant.class,  "votes");
     public static TestMatcher<RestaurantTo> RESTAURANT_TO_MATCHER = TestMatcher.usingFieldsComparator(RestaurantTo.class);
     public static TestMatcher<VoteTo> VOTE_TO_MATCHER = TestMatcher.usingFieldsComparator(VoteTo.class, "dateTime", "user");
 
@@ -34,5 +36,10 @@ public class TestData {
     public static final List<Dish> DISHES = List.of(DISH1, DISH2);
     public static final List<Menu> MENUS = List.of(MENU);
     public static final List<RestaurantTo> RESTAURANTS = List.of(RESTAURANT_TO);
+
+    static {
+        MENU.setDishes(List.of(DISH1, DISH2));
+        RESTAURANT.setMenus(List.of(MENU));
+    }
 
 }

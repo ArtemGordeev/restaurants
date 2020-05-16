@@ -2,7 +2,6 @@ package com.web.restaurant;
 
 
 import com.model.Restaurant;
-import com.repository.RestaurantRepository;
 import com.service.RestaurantService;
 import com.util.exception.NotFoundException;
 import com.web.AbstractControllerTest;
@@ -12,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.List;
 
 import static com.TestData.*;
 import static com.TestUtil.readFromJson;
@@ -105,5 +106,15 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(RESTAURANT_TO_MATCHER.contentJson(RESTAURANTS));
+    }
+
+    @Test
+    void getAllWithTodayMenu() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "today")
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RESTAURANT_MATCHER_INCLUDE_MENU.contentJson(List.of(RESTAURANT)));
     }
 }
