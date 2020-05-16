@@ -2,6 +2,7 @@ package com.model;
 
 import com.HasId;
 import com.View;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -25,6 +26,7 @@ public class Dish extends AbstractBaseEntity implements HasId {
     @JoinColumn(name = "menu_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull(groups = View.Persist.class)
+    @JsonIgnore
     private Menu menu;
 
     public Dish() {
@@ -75,8 +77,10 @@ public class Dish extends AbstractBaseEntity implements HasId {
     @Override
     public String toString() {
         return "Dish{" +
-                "description='" + description + '\'' +
+                "id=" + id +
+                ", description='" + description + '\'' +
                 ", price=" + price +
+                ", menu=" + menu +
                 '}';
     }
 }

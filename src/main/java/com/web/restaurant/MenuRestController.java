@@ -70,8 +70,8 @@ public class MenuRestController {
     }
 
     @GetMapping("/restaurants/{restaurantId}/menus/today")
-    public Menu getToday(@PathVariable int restaurantId) {
+    public Menu getTodayWithDishes(@PathVariable int restaurantId) {
         log.info("get today's menu");
-        return menuService.getTodayMenu(restaurantId);
+        return menuService.getTodayWithDishes(restaurantId);
     }
 }

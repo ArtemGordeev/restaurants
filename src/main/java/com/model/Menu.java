@@ -91,7 +91,11 @@ public class Menu extends AbstractBaseEntity implements HasId {
     @Override
     public String toString() {
         return "Menu{" +
-                "title='" + title + '\'' +
+                "id=" + id +
+                ", title='" + title + '\'' +
+//                ", dishes=" + dishes +
+//                ", restaurant=" + restaurant +
+                ", date=" + date +
                 '}';
     }
 }

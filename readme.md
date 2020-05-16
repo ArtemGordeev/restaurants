@@ -90,11 +90,12 @@ P.P.S.: Asume that your API will be used by a frontend developer to build fronte
 - Success Response: 200 OK, Content: [{"id": 100003,"title": "Monday","dishes": null,"restaurant": null,"date": "2020-04-01"}, …]
 - curl -s http://localhost:8080/graduation/rest/restaurants/100002/menus --user admin@gmail.com:admin
 
-#### Get today’s menu
+#### Get today’s menu with dishes
 - Method: GET 	
 - URL: http://localhost:8080/graduation/rest/restaurants/100002/menus/today
 - Data parameters: none
-- Success Response: 200 OK, Content: {"id": 100003,"title": "Monday","dishes": null,"restaurant": null,"date": "2020-04-01"}
+- Success Response: 200 OK, Content: {"id": 100003,"title": "Monday","dishes": [{"id": 100004,"description": "Pizza","price": 150},{"id": 100005,"description": "Tea","price": 50}],
+"restaurant": null,"date": "2020-05-16"}
 - curl -s http://localhost:8080/graduation/rest/restaurants/100002/menus/today --user admin@gmail.com:admin
 
 #### Delete by id (admin only):

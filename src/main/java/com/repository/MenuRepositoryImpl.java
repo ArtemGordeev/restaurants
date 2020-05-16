@@ -3,11 +3,8 @@ package com.repository;
 import com.model.Menu;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.util.List;
-
-import static com.util.ValidationUtil.checkNotFoundWithId;
 
 @Repository
 public class MenuRepositoryImpl implements MenuRepository {
@@ -43,8 +40,8 @@ public class MenuRepositoryImpl implements MenuRepository {
     }
 
     @Override
-    public Menu getTodayMenu(int restaurantId) {
-        return crudMenuRepository.getTodayMenu(restaurantId);
+    public Menu getTodayMenuWithDishes(int restaurantId) {
+        return crudMenuRepository.getTodayMenuWithDishes(restaurantId);
     }
 
 }

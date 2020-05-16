@@ -28,7 +28,7 @@ VALUES ('KFC');
 -- VALUES ('Monday', '2020-04-01 00:00:00', 100002);
 
 INSERT INTO menus (title, date, restaurant_id)
-VALUES ('Monday', '2020-04-01', 100002);
+VALUES ('Monday', current_date , 100002);
 
 INSERT INTO dishes (description, price, menu_id)
 VALUES ('Pizza', 150, 100003),

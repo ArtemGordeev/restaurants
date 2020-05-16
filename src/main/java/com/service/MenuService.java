@@ -35,7 +35,7 @@ public class MenuService {
         return checkNotFoundWithId(save, save.id());
     }
 
-    public Menu getTodayMenu(int restaurantId) {
-        return menuRepository.getTodayMenu(restaurantId);
+    public Menu getTodayWithDishes(int restaurantId) {
+        return menuRepository.getTodayMenuWithDishes(restaurantId);
     }
 }
