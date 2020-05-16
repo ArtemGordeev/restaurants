@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static com.TestData.RESTAURANT_ID;
-import static com.TestData.VOTE_TO_MATCHER;
+import static com.TestData.*;
 import static com.TestUtil.userHttpBasic;
-import static com.UserTestData.ADMIN;
+import static com.UserTestData.*;
 import static com.util.VoteUtil.getVoteTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -72,11 +72,30 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());
         perform(MockMvcRequestBuilders.get("/rest/votes")
-                .param("date", "2020-05-16")
+                .param("date", LocalDate.now().toString())
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(VOTE_TO_MATCHER.contentJson(getVoteTo(voteRepository.getAll())));
+    }
+
+    @Test
+    public void getWinner() throws Exception{
+        perform(MockMvcRequestBuilders.post("/rest/vote/" + RESTAURANT_ID)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isNoContent());
+        perform(MockMvcRequestBuilders.post("/rest/vote/" + RESTAURANT_ID)
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isNoContent());
+        perform(MockMvcRequestBuilders.post("/rest/vote/" + RESTAURANT2_ID)
+                .with(userHttpBasic(USER2)))
+                .andExpect(status().isNoContent());
+        perform(MockMvcRequestBuilders.get("/rest/votes/today/winner")
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RESTAURANT_MATCHER.contentJson(RESTAURANT));
     }
 }
