@@ -1,5 +1,6 @@
 package com.service;
 
+import com.model.Menu;
 import com.model.Restaurant;
 import com.repository.CrudMenuRepository;
 import com.repository.CrudRestaurantRepository;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.util.ValidationUtil.checkNotFoundWithId;
 
@@ -48,7 +50,10 @@ public class RestaurantService {
     public List<Restaurant> getAllWithTodayMenu() {
         List<Restaurant> all = restaurantRepository.findAll();
         for (Restaurant restaurant : all) {
-            restaurant.setMenus(List.of(menuRepository.getTodayMenuWithDishes(restaurant.id())));
+            Menu todayMenuWithDishes = menuRepository.getTodayMenuWithDishes(restaurant.id());
+            if(Objects.nonNull(todayMenuWithDishes)){
+                restaurant.setMenus(List.of(todayMenuWithDishes));
+            }
         }
         return all;
     }
