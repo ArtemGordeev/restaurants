@@ -67,6 +67,16 @@ class VoteRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    public void getAll() throws Exception{
+        perform(MockMvcRequestBuilders.get("/rest/votes")
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(VOTE_TO_MATCHER.contentJson(getVoteTo(voteService.getAll())));
+    }
+
+    @Test
     public void getAllByDate() throws Exception{
         perform(MockMvcRequestBuilders.post("/rest/vote/" + RESTAURANT_ID)
                 .with(userHttpBasic(ADMIN)))
@@ -77,7 +87,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VOTE_TO_MATCHER.contentJson(getVoteTo(voteService.getAll())));
+                .andExpect(VOTE_TO_MATCHER.contentJson(getVoteTo(voteService.getAllByDate(LocalDate.now()))));
     }
 
     @Test

@@ -6,6 +6,7 @@ import com.model.Vote;
 import com.repository.CrudRestaurantRepository;
 import com.repository.CrudUserRepository;
 import com.repository.CrudVoteRepository;
+import com.web.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,15 +37,16 @@ public class VoteService {
     }
 
     @Transactional
-    public Vote save(int restaurantId, int userId) {
+    public Vote save(int restaurantId) {
+        int userId = SecurityUtil.authUserId();
         Restaurant restaurant = crudRestaurantRepository.getOne(restaurantId);
         Vote vote = crudVoteRepository.findByUserIdAndDateIsLike(userId, LocalDate.now());
         if (vote != null) {
             if (vote.afterEleven()) {
                 return null;
             } else {
-                vote.setDate(LocalDate.now());
-                vote.setTime(LocalTime.now());
+//                vote.setDate(LocalDate.now());
+//                vote.setTime(LocalTime.now());
                 vote.setRestaurant(restaurant);
                 return crudVoteRepository.save(vote);
             }

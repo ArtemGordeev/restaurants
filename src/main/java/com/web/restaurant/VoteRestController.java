@@ -34,8 +34,7 @@ public class VoteRestController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void voteRestaurant(@PathVariable("restaurantId") int restaurantId) {
         log.info("vote for restaurant");
-        int userId = SecurityUtil.authUserId();
-        checkVote(voteService.save(restaurantId, userId));
+        checkVote(voteService.save(restaurantId));
     }
 
     @GetMapping("/votes")
