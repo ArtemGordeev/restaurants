@@ -3,7 +3,7 @@ package com.web.user;
 
 import com.HasIdAndEmail;
 import com.model.User;
-import com.repository.UserRepository;
+import com.repository.CrudUserRepository;
 import com.web.ExceptionInfoHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import org.springframework.validation.Errors;
 public class UniqueMailValidator implements org.springframework.validation.Validator {
 
     @Autowired
-    private UserRepository repository;
+    private CrudUserRepository repository;
 
     @Override
     public boolean supports(Class<?> clazz) {

@@ -2,11 +2,12 @@ package com.service;
 
 import com.AuthorizedUser;
 import com.model.User;
-import com.repository.UserRepository;
+import com.repository.CrudUserRepository;
 import com.to.UserTo;
 import com.util.UserUtil;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,11 +24,12 @@ import static com.util.ValidationUtil.checkNotFoundWithId;
 @Service("userService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserService implements UserDetailsService {
+    private static final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
 
-    private final UserRepository repository;
+    private final CrudUserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
+    public UserService(CrudUserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -38,11 +40,13 @@ public class UserService implements UserDetailsService {
     }
 
     public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id), id);
+        boolean deleted = repository.delete(id) != 0;
+        checkNotFoundWithId(deleted, id);
     }
 
     public User get(int id) {
-        return checkNotFoundWithId(repository.get(id), id);
+        User user = repository.findById(id).orElse(null);
+        return checkNotFoundWithId(user, id);
     }
 
     public User getByEmail(String email) {
@@ -51,7 +55,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> getAll() {
-        return repository.getAll();
+        return repository.findAll(SORT_NAME_EMAIL);
     }
 
     public void update(User user) {

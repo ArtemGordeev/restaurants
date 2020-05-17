@@ -1,37 +1,65 @@
 package com.service;
 
 import com.model.Restaurant;
+import com.model.User;
 import com.model.Vote;
-import com.repository.VoteRepository;
+import com.repository.CrudRestaurantRepository;
+import com.repository.CrudUserRepository;
+import com.repository.CrudVoteRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class VoteService {
-    private VoteRepository voteRepository;
+    private CrudVoteRepository crudVoteRepository;
 
-    public VoteService(VoteRepository voteRepository) {
-        this.voteRepository = voteRepository;
+    private CrudRestaurantRepository crudRestaurantRepository;
+
+    private CrudUserRepository crudUserRepository;
+
+    public VoteService(CrudVoteRepository crudVoteRepository,
+                       CrudRestaurantRepository crudRestaurantRepository,
+                       CrudUserRepository crudUserRepository) {
+        this.crudVoteRepository = crudVoteRepository;
+        this.crudRestaurantRepository = crudRestaurantRepository;
+        this.crudUserRepository = crudUserRepository;
     }
 
     public List<Vote> getAll() {
-        return voteRepository.getAll();
+        return crudVoteRepository.getAll();
     }
 
+    @Transactional
     public Vote save(int restaurantId, int userId) {
-        return voteRepository.save(restaurantId, userId);
+        Restaurant restaurant = crudRestaurantRepository.getOne(restaurantId);
+        Vote vote = crudVoteRepository.findByUserIdAndDateIsLike(userId, LocalDate.now());
+        if (vote != null) {
+            if (vote.afterEleven()) {
+                return null;
+            } else {
+                vote.setDate(LocalDate.now());
+                vote.setTime(LocalTime.now());
+                vote.setRestaurant(restaurant);
+                return crudVoteRepository.save(vote);
+            }
+        }
+        User user = crudUserRepository.getOne(userId);
+        vote = new Vote(LocalDate.now(), LocalTime.now(), restaurant, user);
+        return crudVoteRepository.save(vote);
     }
 
     public List<Vote> getAllByDate(LocalDate localDate) {
-        return voteRepository.getAllByDate(localDate);
+        return crudVoteRepository.getAllByDate(localDate);
     }
 
     public List<Vote> getAllToday() {
-        return voteRepository.getAllByDate(LocalDate.now());
+        return crudVoteRepository.getAllByDate(LocalDate.now());
     }
 
     public Restaurant getWinner() {
@@ -54,7 +82,10 @@ public class VoteService {
                 winner = entry.getKey();
             }
         }
-        //System.out.println("************Votes for winner: " + max);
         return winner;
+    }
+
+    public int countPerToday(int restaurantId){
+        return crudVoteRepository.countPerToday(restaurantId);
     }
 }

@@ -2,9 +2,7 @@ package com.service;
 
 import com.model.Role;
 import com.model.User;
-import com.repository.UserRepository;
 import com.util.exception.NotFoundException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -27,9 +25,6 @@ public class UserServiceTest {
 
     @Autowired
     protected UserService service;
-    @Autowired
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    private UserRepository repository;
 
     @Test
     void create() throws Exception {
@@ -50,7 +45,7 @@ public class UserServiceTest {
     @Test
     public void delete() throws Exception {
         service.delete(USER_ID);
-        Assertions.assertNull(repository.get(USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(USER_ID));
     }
 
     @Test

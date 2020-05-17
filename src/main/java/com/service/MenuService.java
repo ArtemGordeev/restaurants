@@ -1,8 +1,10 @@
 package com.service;
 
 import com.model.Menu;
-import com.repository.MenuRepository;
+import com.repository.CrudMenuRepository;
+import com.repository.CrudRestaurantRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -11,31 +13,38 @@ import static com.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class MenuService {
-    private MenuRepository menuRepository;
+    CrudMenuRepository crudMenuRepository;
 
-    public MenuService(MenuRepository menuRepository) {
-        this.menuRepository = menuRepository;
+    CrudRestaurantRepository crudRestaurantRepository;
+
+    public MenuService(CrudMenuRepository crudMenuRepository, CrudRestaurantRepository crudRestaurantRepository) {
+        this.crudMenuRepository = crudMenuRepository;
+        this.crudRestaurantRepository = crudRestaurantRepository;
     }
 
     public List<Menu> getAll(int restaurantId) {
-        return menuRepository.getAll(restaurantId);
+        return crudMenuRepository.findAllByRestaurantId(restaurantId);
     }
 
     public void delete(int id) {
-        checkNotFoundWithId(menuRepository.delete(id), id);
+        boolean deleted = crudMenuRepository.delete(id) != 0;
+        checkNotFoundWithId(deleted, id);
     }
 
     public Menu get(int id) {
-        return checkNotFoundWithId(menuRepository.get(id), id);
+        Menu menu = crudMenuRepository.findById(id).orElse(null);
+        return checkNotFoundWithId(menu, id);
     }
 
+    @Transactional
     public Menu save(Menu menu, int restaurantId) {
         Assert.notNull(menu, "menu must not be null");
-        Menu save = menuRepository.save(menu, restaurantId);
+        menu.setRestaurant(crudRestaurantRepository.getOne(restaurantId));
+        Menu save = crudMenuRepository.save(menu);
         return checkNotFoundWithId(save, save.id());
     }
 
     public Menu getTodayWithDishes(int restaurantId) {
-        return menuRepository.getTodayMenuWithDishes(restaurantId);
+        return crudMenuRepository.getTodayMenuWithDishes(restaurantId);
     }
 }

@@ -1,7 +1,7 @@
 package com.web.restaurant;
 
 
-import com.repository.VoteRepository;
+import com.service.VoteService;
 import com.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class VoteRestControllerTest extends AbstractControllerTest {
 
     @Autowired
-    private VoteRepository voteRepository;
+    private VoteService voteService;
 
     @Test
     void voteRestaurant() throws Exception {
@@ -34,7 +34,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VOTE_TO_MATCHER.contentJson(getVoteTo(voteRepository.getAll())));
+                .andExpect(VOTE_TO_MATCHER.contentJson(getVoteTo(voteService.getAll())));
     }
 
     @Test
@@ -56,7 +56,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                    .andExpect(VOTE_TO_MATCHER.contentJson(getVoteTo(voteRepository.getAll())));
+                    .andExpect(VOTE_TO_MATCHER.contentJson(getVoteTo(voteService.getAll())));
         }
     }
 
@@ -77,7 +77,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VOTE_TO_MATCHER.contentJson(getVoteTo(voteRepository.getAll())));
+                .andExpect(VOTE_TO_MATCHER.contentJson(getVoteTo(voteService.getAll())));
     }
 
     @Test
