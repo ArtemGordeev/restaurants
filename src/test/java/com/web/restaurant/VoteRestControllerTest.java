@@ -61,7 +61,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getUnauth() throws Exception {
+    void voteUnauth() throws Exception {
         perform(MockMvcRequestBuilders.get("/rest/vote/" + RESTAURANT_ID))
                 .andExpect(status().isUnauthorized());
     }

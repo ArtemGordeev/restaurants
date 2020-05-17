@@ -41,8 +41,8 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getUnauth() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + DISH1_ID))
+    void deleteUnauth() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_ADMIN_URL + RESTAURANT_ID))
                 .andExpect(status().isUnauthorized());
     }
 
