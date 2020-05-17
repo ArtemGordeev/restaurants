@@ -54,24 +54,24 @@ P.P.S.: Asume that your API will be used by a frontend developer to build fronte
 
 #### Delete by id (admin only):
 - Method: DELETE	
-- URL: http://localhost:8080/graduation/rest/restaurants/100003/menus/100005/dishes/100007
+- URL: http://localhost:8080/graduation/rest/admin/restaurants/100003/menus/100005/dishes/100007
 - Data parameters: none
 - Success Response: 204 No Content
-- curl -s -X DELETE http://localhost:8080/graduation/rest/restaurants/100003/menus/100005/dishes/100007 --user admin@gmail.com:admin
+- curl -s -X DELETE http://localhost:8080/graduation/rest/admin/restaurants/100003/menus/100005/dishes/100007 --user admin@gmail.com:admin
 
 #### Update (admin only): 
 - Method: PUT 	
-- URL: http://localhost:8080/graduation/rest/restaurants/100003/menus/100005/dishes/100007
+- URL: http://localhost:8080/graduation/rest/admin/restaurants/100003/menus/100005/dishes/100007
 - Data parameters: {"id": 100007, "description": "NewPizza", "price": 150}
 - Success Response: 204 No Content
-- curl -s -X PUT -d "{\"id\": 100007, \"description\": \"NewPizza\", \"price\": 150}" -H "Content-Type: application/json" http://localhost:8080/graduation/rest/restaurants/100003/menus/100005/dishes/100007 --user admin@gmail.com:admin
+- curl -s -X PUT -d "{\"id\": 100007, \"description\": \"NewPizza\", \"price\": 150}" -H "Content-Type: application/json" http://localhost:8080/graduation/rest/admin/restaurants/100003/menus/100005/dishes/100007 --user admin@gmail.com:admin
 
 #### Create (admin only):
 - Method: POST 	
-- URL: http://localhost:8080/graduation/rest/restaurants/100003/menus/100005/dishes/
+- URL: http://localhost:8080/graduation/rest/admin/restaurants/100003/menus/100005/dishes/
 - Data parameters: {"id": null, "description": "NewPizza", "price": 150}
 - Success Response: 201 Created, Content: {"id": 100006,"description": "NewPizza","price": 150,"menu": null}
-- curl -s -X POST -d "{\"id\": null, \"description\": \"NewPizza\", \"price\": 150}" –H "Content-Type:application/json;charset=UTF-8" http://localhost:8080/graduation/rest/restaurants/100003/menus/100005/dishes/ --user admin@gmail.com:admin
+- curl -s -X POST -d "{\"id\": null, \"description\": \"NewPizza\", \"price\": 150}" –H "Content-Type:application/json;charset=UTF-8" http://localhost:8080/graduation/rest/admin/restaurants/100003/menus/100005/dishes/ --user admin@gmail.com:admin
 
 -----------------------------
 
@@ -100,17 +100,17 @@ P.P.S.: Asume that your API will be used by a frontend developer to build fronte
 
 #### Delete by id (admin only):
 - Method: DELETE		
-- URL: http://localhost:8080/graduation/rest/restaurants/100003/menus/100005
+- URL: http://localhost:8080/graduation/rest/admin/restaurants/100003/menus/100005
 - Data parameters: none
 - Success Response: 204 No Content
-- curl -s -X DELETE http://localhost:8080/graduation/rest/restaurants/100003/menus/100005 --user admin@gmail.com:admin
+- curl -s -X DELETE http://localhost:8080/graduation/rest/admin/restaurants/100003/menus/100005 --user admin@gmail.com:admin
 
 #### Update (admin only): 
 - Method: PUT 	
-- URL: http://localhost:8080/graduation/rest/restaurants/100003/menus/100005
+- URL: http://localhost:8080/graduation/rest/admin/restaurants/100003/menus/100005
 - Data parameters: {"id": 100005, "title": "Sunday", "dishes": null, "restaurant": null, "date":"2020-04-01"}
 - Success Response: 204 No Content
-- curl -s -X PUT -d "{\"id\": 100005, \"title\": \"Sunday\", \"dishes\": null, \"restaurant\": null, \"date\":\"2020-04-01\"}" -H "Content-Type: application/json" http://localhost:8080/graduation/rest/restaurants/100003/menus/100005 --user admin@gmail.com:admin
+- curl -s -X PUT -d "{\"id\": 100005, \"title\": \"Sunday\", \"dishes\": null, \"restaurant\": null, \"date\":\"2020-04-01\"}" -H "Content-Type: application/json" http://localhost:8080/graduation/rest/admin/restaurants/100003/menus/100005 --user admin@gmail.com:admin
 
 #### Create (admin only):
 - Method: POST 	
@@ -154,16 +154,16 @@ P.P.S.: Asume that your API will be used by a frontend developer to build fronte
 #### Update (admin only): 
 - Method: PUT
 - URL: http://localhost:8080/graduation/rest/admin/restaurants/100003
-- Data parameters: {"id": 100003, "title": "Burger King", "menus": null, "votes": null}
+- Data parameters: {"id": 100003, "title": "Burger King", "menus": null}
 - Success Response: 204 No Content
-- curl -s -X PUT -d "{\"id\": 100003, \"title\": \"Burger King\", \"menus\": null, \"votes\": null}" -H "Content-Type: application/json" http://localhost:8080/graduation/rest/admin/restaurants/100003 --user admin@gmail.com:admin
+- curl -s -X PUT -d "{\"id\": 100003, \"title\": \"Burger King\", \"menus\": null}" -H "Content-Type: application/json" http://localhost:8080/graduation/rest/admin/restaurants/100003 --user admin@gmail.com:admin
 
 #### Create (admin only):
 - Method: POST 	
 - URL: http://localhost:8080/graduation/rest/admin/restaurants/
-- Data parameters: {"id": null, "title": "Burger King", "menus": null, "votes": null}
+- Data parameters: {"id": null, "title": "Burger King", "menus": null}
 - Success Response: 201 Created, Content: {"id": 100006,"title": "Burger King"}
-- curl -s -X POST –d "{\"id\": null, \"title\": \"Burger King\", \"menus\": null, \"votes\": null}" –H "Content-Type:application/json;charset=UTF-8" http://localhost:8080/graduation/rest/admin/restaurants/ --user admin@gmail.com:admin
+- curl -s -X POST –d "{\"id\": null, \"title\": \"Burger King\", \"menus\": null}" –H "Content-Type:application/json;charset=UTF-8" http://localhost:8080/graduation/rest/admin/restaurants/ --user admin@gmail.com:admin
 
 -----------------------------
 

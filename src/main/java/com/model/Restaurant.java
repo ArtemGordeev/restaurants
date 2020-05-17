@@ -19,9 +19,6 @@ public class Restaurant extends AbstractBaseEntity implements HasId {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private List<Menu> menus;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    private List<Vote> votes;
-
     public Restaurant() {
         title = "";
     }
@@ -60,14 +57,6 @@ public class Restaurant extends AbstractBaseEntity implements HasId {
 
     public void setMenus(List<Menu> menus) {
         this.menus = menus;
-    }
-
-    public List<Vote> getVotes() {
-        return votes;
-    }
-
-    public void setVotes(List<Vote> votes) {
-        this.votes = votes;
     }
 
     @Override

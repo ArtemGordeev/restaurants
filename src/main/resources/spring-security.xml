@@ -11,7 +11,9 @@
         <http-basic/>
         <intercept-url pattern="/rest/admin/**" access="hasRole('ADMIN')"/>
         <intercept-url pattern="/rest/profile/register" access="isAnonymous()"/>
-        <intercept-url pattern="/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/rest/vote/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/rest/votes/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/rest/**" access="isAnonymous()"/>
         <csrf disabled="true"/>
     </http>
 
