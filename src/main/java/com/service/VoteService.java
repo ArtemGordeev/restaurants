@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.util.DateTimeUtil.afterEleven;
+
 @Service
 public class VoteService {
     private CrudVoteRepository crudVoteRepository;
@@ -42,7 +44,7 @@ public class VoteService {
         Restaurant restaurant = crudRestaurantRepository.getOne(restaurantId);
         Vote vote = crudVoteRepository.findByUserIdAndDateIsLike(userId, LocalDate.now());
         if (vote != null) {
-            if (vote.afterEleven()) {
+            if (afterEleven(vote.getTime())) {
                 return null;
             } else {
 //                vote.setDate(LocalDate.now());

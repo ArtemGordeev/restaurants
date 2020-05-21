@@ -41,4 +41,8 @@ public class DateTimeUtil {
     LocalTime parseLocalTime(@Nullable String str) {
         return StringUtils.isEmpty(str) ? null : LocalTime.parse(str);
     }
+
+    public static boolean afterEleven(LocalTime time){
+        return time.compareTo(LocalTime.of(11, 0)) >= 0;
+    }
 }
